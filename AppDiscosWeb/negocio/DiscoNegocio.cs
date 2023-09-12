@@ -57,10 +57,21 @@ namespace AppDiscosWeb.negocio
         public void agregar(Disco nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
-
+            //nuevo.Titulo = "Pablo Honey";
+            //nuevo.FechaLanzamiento = DateTime.Parse("1992-01-01 00:00:00");
+            //nuevo.CantidadCanciones = 12;
+            //nuevo.UrlImagenTapa = "https://cdns-images.dzcdn.net/images/cover/f08424290260e58c6d76275253b316fd/264x264.jpg";
+            //nuevo.Estilo.Id = 2;
+            //nuevo.TipoEdicion.Id = 1;
             try
             {
-                datos.setearConsulta("Insert into DISCOS (Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa) values (' " + nuevo.Titulo + "','" + nuevo.FechaLanzamiento + "'," + nuevo.CantidadCanciones + " , '" + nuevo.UrlImagenTapa + "')");
+                datos.setearConsulta("Insert into DISCOS (Titulo, FechaLanzamiento, CantidadCanciones, UrlImagenTapa, IdEstilo, IdTipoEdicion) values (@titulo, @fechaLanzamiento, @cantidadCanciones, @urlImagenTapa, @idEstilo, @idTipoEdicion)");
+                datos.setearParametro("@titulo",nuevo.Titulo);
+                datos.setearParametro("@fechaLanzamiento",nuevo.FechaLanzamiento);
+                datos.setearParametro("@cantidadCanciones",nuevo.CantidadCanciones);
+                datos.setearParametro("@urlImagenTapa", nuevo.UrlImagenTapa);
+                datos.setearParametro("@idEstilo", nuevo.Estilo.Id);
+                datos.setearParametro("@idTipoEdicion", nuevo.TipoEdicion.Id);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

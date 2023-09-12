@@ -14,7 +14,7 @@
             <asp:BoundField HeaderText="Cant Canciones" DataField="CantidadCanciones" />
             <asp:BoundField HeaderText="Estilo" DataField="Estilo.Descripcion" />
             <asp:BoundField HeaderText="Edicion" DataField="TipoEdicion.Descripcion" />
-            <asp:CommandField HeaderText="Acción" ShowSelectButton="true" SelectText="Seleccionar" />
+            <asp:CommandField HeaderText="Acción" ShowSelectButton="true" SelectText="✍" />
         </Columns>
     </asp:GridView>
     <a href="FormularioDisco.aspx" class="btn btn-primary">Agregar</a>

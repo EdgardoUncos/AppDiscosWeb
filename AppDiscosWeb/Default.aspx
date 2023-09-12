@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <h1>Bienvenido a Tu Catalogo de Discos</h1>
 
-    <%-- Listado de Cards con forEacha--%>
+    <%-- Listado de Cards con forEach--%>
     <%--<div class="row row-cols-1 row-cols-md-3 g-4">
         <%foreach (var item in ListaDiscos)
             {%>

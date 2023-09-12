@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="FormularioDisco.aspx" />
     <Content Include="Global.asax" />
     <Content Include="ListarDiscos.aspx" />
     <Content Include="Web.config" />
@@ -82,6 +83,13 @@
     </Compile>
     <Compile Include="dominio\Disco.cs" />
     <Compile Include="dominio\Tipo.cs" />
+    <Compile Include="FormularioDisco.aspx.cs">
+      <DependentUpon>FormularioDisco.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormularioDisco.aspx.designer.cs">
+      <DependentUpon>FormularioDisco.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

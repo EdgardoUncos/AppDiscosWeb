@@ -18,10 +18,11 @@ namespace AppDiscosWeb
             dgvDiscos.DataBind();
         }
 
+        // Evento Click Accion pasa por parametros el id a FormularioDisco
         protected void dgvDiscos_SelectedIndexChanged(object sender, EventArgs e)
         {
             string id = dgvDiscos.SelectedDataKey.Value.ToString();
-            Response.Redirect("FormularioDiscos.aspx?id=" + id, false);
+            Response.Redirect("FormularioDisco.aspx?id=" + id, false);
         }
 
         protected void dgvDiscos_PageIndexChanging(object sender, GridViewPageEventArgs e)

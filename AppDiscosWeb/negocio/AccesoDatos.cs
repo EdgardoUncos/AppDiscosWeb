@@ -19,7 +19,7 @@ namespace AppDiscosWeb.negocio
 
         public AccesoDatos()
         {
-            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=DISCOS_DB; integrated security= true");
+            conexion = new SqlConnection("server=GARGO-PC\\SQLEXPRESS; database=DISCOS_DB; integrated security= true");
             comando = new SqlCommand();
         }
 
@@ -27,6 +27,12 @@ namespace AppDiscosWeb.negocio
         {
             comando.CommandType = System.Data.CommandType.Text;
             comando.CommandText = consulta;
+        }
+
+        public void setearProcedimiento(string sp)
+        {
+            comando.CommandType = System.Data.CommandType.StoredProcedure;
+            comando.CommandText = sp;
         }
 
         public void ejecutarLectura()
@@ -58,10 +64,14 @@ namespace AppDiscosWeb.negocio
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
         }
 
+        public void setearParametro(string nombre, object valor)
+        {
+            comando.Parameters.AddWithValue(nombre, valor);
+        }
         public void cerrarConexion()
         {
             if (lector != null)
