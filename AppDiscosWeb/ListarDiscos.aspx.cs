@@ -17,5 +17,17 @@ namespace AppDiscosWeb
             dgvDiscos.DataSource = negocio.listar();
             dgvDiscos.DataBind();
         }
+
+        protected void dgvDiscos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string id = dgvDiscos.SelectedDataKey.Value.ToString();
+            Response.Redirect("FormularioDiscos.aspx?id=" + id, false);
+        }
+
+        protected void dgvDiscos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvDiscos.PageIndex = e.NewPageIndex;
+            dgvDiscos.DataBind();
+        }
     }
 }

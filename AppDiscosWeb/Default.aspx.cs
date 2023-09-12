@@ -17,6 +17,18 @@ namespace AppDiscosWeb
             DiscoNegocio negocio = new DiscoNegocio();
             ListaDiscos = negocio.listar();
 
+            if(!IsPostBack)
+            {
+                repRepetidor.DataSource = ListaDiscos;
+                repRepetidor.DataBind();
+
+            }
+
+        }
+
+        protected void btnDetalle_Click(object sender, EventArgs e)
+        {
+            string valor = ((Button)sender).CommandArgument;
         }
     }
 }
