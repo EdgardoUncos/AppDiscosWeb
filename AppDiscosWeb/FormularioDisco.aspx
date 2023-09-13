@@ -15,8 +15,8 @@
             </div>
             <div class="mb-3">
                 <label for="txtFechaLanzamiento" class="form-label">Fecha Lanzamiento</label>
-                <%--<asp:TextBox ID="txtFechaLanzamiento" runat="server" CssClass="form-control"></asp:TextBox>--%>
-                <asp:Calendar ID="txtFecha" runat="server"></asp:Calendar>
+                <asp:TextBox ID="txtFechaLanzamiento" TextMode="DateTime" runat="server" CssClass="form-control"></asp:TextBox>
+                                               
             </div>
             <div class="mb-3">
                 <label for="cantidadCanciones" class="form-label">Cantidad Canciones</label>
@@ -41,10 +41,10 @@
 
             <div class="mb-3">
                 <label for="txtUrlImagenTapa" class="form-label">Url Imagen</label>
-                 <asp:TextBox ID="txtUrlImagenTapa" runat="server" CssClass="form-control"></asp:TextBox>
+                 <asp:TextBox ID="txtUrlImagenTapa" runat="server" CssClass="form-control" OnTextChanged="txtUrlImagenTapa_TextChanged"></asp:TextBox>
             </div>
             <div class="mb-3">
-                <asp:Image ImageUrl="https://grupoact.com.ar/wp-content/uploads/2020/04/placeholder.png" ID="imgDisco" runat="server" Width="60%" />
+                <asp:Image ImageUrl="https://grupoact.com.ar/wp-content/uploads/2020/04/placeholder.png" ID="imgDisco" runat="server" Width="50%" />
             </div>
         </div>
 

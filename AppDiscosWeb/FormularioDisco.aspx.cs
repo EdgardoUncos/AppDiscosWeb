@@ -16,33 +16,40 @@ namespace AppDiscosWeb
             txtId.Enabled = false;
             try
             {
+                // Configuracion inicial de la pantalla
                 if(!IsPostBack)
                 {
                     TipoNegocio negocioT = new TipoNegocio();
-                    List<Tipo> listaT = negocioT.listar();
+                    //List<Tipo> listaT = negocioT.listar();
 
-                    ddlEdicion.DataSource = listaT;
+                    ddlEdicion.DataSource = negocioT.listar();
                     ddlEdicion.DataValueField = "Id";
                     ddlEdicion.DataTextField = "Descripcion";
                     ddlEdicion.DataBind();
 
-                    ddlEstilo.DataSource = listaT;
+                    ddlEstilo.DataSource = negocioT.ListarTipo(); ;
                     ddlEstilo.DataValueField = "Id";
                     ddlEstilo.DataTextField = "Descripcion";
                     ddlEstilo.DataBind();
 
+                    // Configuracion si estamos modificando.
+
                     if(Request.QueryString["id"] != null)
                     {
-                        int id = int.Parse(Request.QueryString["id"].ToString());
-                        List<Disco> ListaDisco;
                         DiscoNegocio negocio = new DiscoNegocio();
-                        ListaDisco = negocio.listar();
-                        Disco seleccionado = ListaDisco.Find(x => x.Id == id);
+                        List<Disco> lista = negocio.listar(Request.QueryString["id"].ToString());
+                        Disco seleccionado = lista[0];
 
                         txtId.Text = seleccionado.Id.ToString();
                         txtTitulo.Text = seleccionado.Titulo;
                         txtCantidadCanciones.Text = seleccionado.CantidadCanciones.ToString();
                         txtUrlImagenTapa.Text = seleccionado.UrlImagenTapa;
+                        txtFechaLanzamiento.Text = seleccionado.FechaLanzamiento.ToString();
+
+                        ddlEstilo.SelectedValue = seleccionado.Estilo.Id.ToString();
+                        ddlEdicion.SelectedValue = seleccionado.TipoEdicion.Id.ToString();
+
+                        txtUrlImagenTapa_TextChanged(sender, e);
                     }
                 }
 
@@ -64,15 +71,27 @@ namespace AppDiscosWeb
                 nuevo.Titulo = txtTitulo.Text;
                 nuevo.CantidadCanciones = int.Parse(txtCantidadCanciones.Text);
                 nuevo.UrlImagenTapa = txtUrlImagenTapa.Text;
-                //nuevo.FechaLanzamiento = DateTime.Parse(txtFechaLanzamiento.Text);
-                nuevo.FechaLanzamiento = txtFecha.SelectedDate;
+                nuevo.FechaLanzamiento = DateTime.Parse(txtFechaLanzamiento.Text);
+                //nuevo.FechaLanzamiento = txtFecha.SelectedDate;
 
                 nuevo.TipoEdicion = new Tipo();
                 nuevo.TipoEdicion.Id = int.Parse(ddlEdicion.SelectedValue);
                 nuevo.Estilo = new Tipo();
                 nuevo.Estilo.Id = int.Parse(ddlEstilo.SelectedValue);
 
-                negocio.agregar(nuevo);
+                if (Request.QueryString["id"] != null)
+                {
+                    nuevo.Id = int.Parse(Request.QueryString["id"].ToString());
+                    negocio.modificar(nuevo);
+
+                }
+                else
+                {
+                    //negocio.agregarConSP(nuevo);
+                    negocio.agregar(nuevo);
+
+                }
+
                 Response.Redirect("Default.aspx", false);
 
             }
@@ -81,6 +100,11 @@ namespace AppDiscosWeb
                 Session.Add("error", ex);
                 throw ex;
             }
+        }
+
+        protected void txtUrlImagenTapa_TextChanged(object sender, EventArgs e)
+        {
+            imgDisco.ImageUrl = txtUrlImagenTapa.Text;
         }
     }
 }

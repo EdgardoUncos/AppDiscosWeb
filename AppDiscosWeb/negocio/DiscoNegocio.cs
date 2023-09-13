@@ -9,7 +9,9 @@ namespace AppDiscosWeb.negocio
 {
     public class DiscoNegocio
     {
-        public List<Disco> listar()
+         //Metodo que trae toda la tabla de discos y lo retorna en lista. El parametro opcional es para buscar
+         // solo un registro
+        public List<Disco> listar(string id ="")
         {
             List<Disco> lista = new List<Disco>();
             SqlConnection conexion = new SqlConnection();
@@ -21,6 +23,11 @@ namespace AppDiscosWeb.negocio
                 conexion.ConnectionString = "server=.\\SQLEXPRESS; database=DISCOS_DB; integrated security=true";
                 comando.CommandType = System.Data.CommandType.Text;
                 comando.CommandText = "Select D.Id, D.Titulo, D.FechaLanzamiento, D.CantidadCanciones, D.UrlImagenTapa, D.IdEstilo, E.Descripcion Estilo, D.IdTipoEdicion, T.Descripcion Edicion From DISCOS D, ESTILOS E, TIPOSEDICION T where D.IdEstilo = E.Id AND D.IdTipoEdicion = T.Id";
+                
+                //Si viene con el param opcional le agrego id a la consulta
+                if (id != "")
+                    comando.CommandText += " and D.Id = " + id;
+
                 comando.Connection = conexion;
 
                 conexion.Open();
@@ -83,6 +90,53 @@ namespace AppDiscosWeb.negocio
             finally
             {
                 datos.cerrarConexion();
+            }
+        }
+
+        public void agregarConSP(Disco nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("storedAltaDisco");
+                datos.setearParametro("@titulo", nuevo.Titulo);
+                datos.setearParametro("@fechaLanzamiento", nuevo.FechaLanzamiento);
+                datos.setearParametro("@cantidadCanciones", nuevo.CantidadCanciones);
+                datos.setearParametro("@urlImagenTapa", nuevo.UrlImagenTapa);
+                datos.setearParametro("@idEstilo", nuevo.Estilo.Id);
+                datos.setearParametro("@idTipoEdicion", nuevo.TipoEdicion.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public void modificar(Disco disco)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("Update Discos Set Titulo = @titulo, CantidadCanciones = @cantidadCanciones, UrlImagenTapa = @urlImagenTapa, IdEstilo = @idEstilo, IdTipoEdicion = @idTipoEdicion Where Id = @id");
+                 
+                datos.setearParametro("@titulo", disco.Titulo);
+                //datos.setearParametro("@fechaLanzamiento", disco.FechaLanzamiento);
+                datos.setearParametro("@cantidadCanciones", disco.CantidadCanciones);
+                datos.setearParametro("@urlImagenTapa", disco.UrlImagenTapa);
+                datos.setearParametro("@idEstilo", disco.Estilo.Id);
+                datos.setearParametro("@idTipoEdicion", disco.TipoEdicion.Id);
+                datos.setearParametro("@id", disco.Id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
 
