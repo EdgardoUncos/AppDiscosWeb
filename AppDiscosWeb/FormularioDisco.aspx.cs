@@ -11,14 +11,17 @@ namespace AppDiscosWeb
 {
     public partial class FormularioDisco : System.Web.UI.Page
     {
+        public bool ConfirmaEliminacion { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             txtId.Enabled = false;
+            
             try
             {
                 // Configuracion inicial de la pantalla
                 if(!IsPostBack)
                 {
+                    ConfirmaEliminacion = false;
                     TipoNegocio negocioT = new TipoNegocio();
                     //List<Tipo> listaT = negocioT.listar();
 
@@ -105,6 +108,35 @@ namespace AppDiscosWeb
         protected void txtUrlImagenTapa_TextChanged(object sender, EventArgs e)
         {
             imgDisco.ImageUrl = txtUrlImagenTapa.Text;
+        }
+
+        protected void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (ConfirmaEliminacion)
+                ConfirmaEliminacion = false;
+            else
+                ConfirmaEliminacion = true;
+            
+        }
+
+        protected void btnConfirmaEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // si esta chequeado el check borramos y redireccionamos
+                if(chkConfirmaEliminacion.Checked)
+                {
+                    DiscoNegocio negocio = new DiscoNegocio();
+                    negocio.eliminar(int.Parse(txtId.Text));
+                    Response.Redirect("ListarDiscos.aspx", false);
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", ex);
+            }
         }
     }
 }
