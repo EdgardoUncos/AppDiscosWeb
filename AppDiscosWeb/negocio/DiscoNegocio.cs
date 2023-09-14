@@ -140,6 +140,91 @@ namespace AppDiscosWeb.negocio
             }
         }
 
+        public List<Disco> filtrar(string campo, string criterio, string filtro)
+        {
+            List<Disco> lista = new List<Disco>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT Titulo, FechaLanzamiento, UrlImagenTapa, CantidadCanciones, T.Descripcion DescripcionEstilo, E.Descripcion DescripcionEdicion, D.IdEstilo, D.IdTipoEdicion, D.Id from DISCOS D, ESTILOS T, TIPOSEDICION E where D.IdEstilo = T.Id AND E.Id = D.IdTipoEdicion AND ";
+                if (campo == "Cantidad Canciones")
+                {
+                    switch (criterio)
+                    {
+                        case "Mayor a":
+                            consulta += "CantidadCanciones > " + filtro;
+                            break;
+                        case "Menor a":
+                            consulta += "CantidadCanciones < " + filtro;
+                            break;
+                        default:
+                            consulta += "CantidadCanciones = " + filtro;
+                            break;
+                    }
+                }
+                else if (campo == "Estilo")
+                {
+                    switch (criterio)
+                    {
+                        case "Comienza con":
+                            consulta += "T.Descripcion like '" + filtro + "%' ";
+                            break;
+                        case "Termina con":
+                            consulta += "T.Descripcion like '%" + filtro + "'";
+                            break;
+                        default:
+                            consulta += "T.Descripcion like '%" + filtro + "%'";
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (criterio)
+                    {
+                        case "Comienza con":
+                            consulta += "E.Descripcion like '" + filtro + "%' ";
+                            break;
+                        case "Termina con":
+                            consulta += "E.Descripcion like '%" + filtro + "'";
+                            break;
+                        default:
+                            consulta += "E.Descripcion like '%" + filtro + "%'";
+                            break;
+                    }
+                }
+
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Disco aux = new Disco();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Titulo = (string)datos.Lector["Titulo"];
+                    aux.FechaLanzamiento = (DateTime)datos.Lector["FechaLanzamiento"];
+                    aux.CantidadCanciones = (int)datos.Lector["CantidadCanciones"];
+                    if (!(datos.Lector["UrlImagenTapa"] is DBNull))
+                        aux.UrlImagenTapa = (string)datos.Lector["UrlImagenTapa"];
+
+                    aux.Estilo = new Tipo();
+                    aux.Estilo.Id = (int)datos.Lector["IdEstilo"];
+                    aux.Estilo.Descripcion = (string)datos.Lector["DescripcionEstilo"];
+                    aux.TipoEdicion = new Tipo();
+                    aux.TipoEdicion.Id = (int)datos.Lector["IdTipoEdicion"];
+                    aux.TipoEdicion.Descripcion = (string)datos.Lector["DescripcionEdicion"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         public void eliminar(int id)
         {
             AccesoDatos datos = new AccesoDatos();
